@@ -1,17 +1,22 @@
 const mongoose = require("mongoose")
-
 const collegeSchema = new mongoose.Schema({
 
     name: {
         type: String,
         required: "plz Enter college name",
-        unique: true
+        unique: true,
+        trim:true
     },
     fullName: {
         type: String,
-        required: "plz Enter full name of  college "
+        required: "plz Enter full name of  college ",
+        trim:true
     },
-    logoLink: "https://functionup-stg.s3.ap-south-1.amazonaws.com/thorium/iitd.png",
+    logoLink: {
+        type:String,
+        required:"enter college logo",
+        trim:true
+    },
     isDeleted: {
         type: Boolean,
         default: false
