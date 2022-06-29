@@ -14,6 +14,12 @@ const isValid = function (value) {
 const college = async function (req,res){
     try{
     let collegeData = req.body;
+
+    let duplicateName = collegeData.name
+    duplicateName = await collegeModel.findOne({name : duplicateName})
+    if(duplicateName){
+        return res.status(400).send({status: false, msg : "Name Already Exist."})
+    }
     
     
     if ( !isValid(collegeData.name) ) 
