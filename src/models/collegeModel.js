@@ -3,13 +3,13 @@ const collegeSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        required: "plz Enter college name",
+        required:[true, "plz Enter college name"],
         unique: true,
         trim:true
     },
     fullName: {
         type: String,
-        required: "plz Enter full name of  college ",
+        required:[true, "plz Enter full name of  college "],
         trim:true
     },
     logoLink: {

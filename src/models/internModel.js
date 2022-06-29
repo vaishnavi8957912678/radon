@@ -4,21 +4,18 @@ const internSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        required: "plz Enter your name",
+        required:[true, "plz Enter your name"],
         trim:true,
-        minlength: 3
     },
     email: {
         type: String,
-        required: "plz enter email address",
+        required:[true ,"plz enter email address"],
         unique: true,
         trim:true
     },
     mobile: {
         type: Number,
-        required: "plz enter mobile number",
-        maxlength: 10,
-        minlength: 10,
+        required:[true ,"plz enter mobile number"],
         unique: true,
         trim:true
     },
