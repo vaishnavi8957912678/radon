@@ -4,16 +4,18 @@ const evalidator = require("validator");
 const mongoose = require("mongoose");
 
 
-const isValid = function (value) {
-  if (typeof value == "number") {
-    return false;
-  }
-  return true;
-};
+const isValid = function(value) {
+    if(typeof (value) == "undefined" || typeof (value) == null) {return false}
+    if(typeof (value) == "string" && (value).trim().length == 0) {return false}
+    if(typeof (value) == 'number' && (value).toString().trim().length == 0){return false}
+    return true
+}
+
 
 const college = async function (req, res) {
   try {
     let collegeData = req.body;
+    //const {name, fullNae}
 
     if (Object.keys(collegeData).length == 0) {
       return res
@@ -21,19 +23,19 @@ const college = async function (req, res) {
         .send({ status: false, msg: "Body should  be not Empty.. " });
     }
 
-    if (!collegeData.name) {
+    if (!isValid(collegeData.name)) {
       return res
         .status(400)
         .send({ status: false, msg: "Name field is mandatory" });
     }
 
-    if (!collegeData.fullName) {
+    if (!isValid(collegeData.fullName)) {
       return res
         .status(400)
         .send({ status: false, msg: "FullName field is mandatory" });
     }
 
-    if (!collegeData.logoLink) {
+    if (!isValid(collegeData.logoLink)) {
       return res
       .status(400)
       .send({ status: false, msg: "LogoLink filed is mandatory" });

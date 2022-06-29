@@ -11,7 +11,7 @@ const internSchema = new mongoose.Schema({
         type: String,
         required:[true ,"plz enter email address"],
         unique: true,
-        trim:true
+        trim: true
     },
     mobile: {
         type: Number,
