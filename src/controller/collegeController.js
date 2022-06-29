@@ -20,8 +20,10 @@ const college = async function (req,res){
     if(duplicateName){
         return res.status(400).send({status: false, msg : "Name Already Exist."})
     }
-    
-    
+    let name=/^[A-Za-z]+$/.test(collegeData.name)
+    if(!name) return res.status(400).send({status : false, msg : "Please Use Alphabets in name"})
+    name=/^[A-Za-z]+$/.test(collegeData.fullName)
+    if(!name) return res.status(400).send({status : false, msg : "Please Use Alphabets in full name"})
     if ( !isValid(collegeData.name) ) 
     return res.status(400).send({status: false, msg: "Enter Valid Name."})
     if ( !isValid(collegeData.fullName) ) 
@@ -36,14 +38,22 @@ const college = async function (req,res){
 
 const getColleges = async function (req,res){
     try{
-    let college = req.query.collegeId;
-   let Id = college
-    if(Id.length != 24){
-        return res.status(400).send({status:false,msg: "invalid college name"}) }
-   let result= await collegeModel.findOne({_id : college}).select({name:1, fullName: 1, logoLink: 1, _id:0})
-   let interns = await internModel.find({collegeId : req.query.collegeName}).select({name:1, email: 1, mobile: 1})
+    let college = req.query.collegeName;
+   let result= await collegeModel.findOne({name : college}).select({name:1, fullName: 1, logoLink: 1, _id:1})
+   let collegeId = result._id.toString()
+   let interns = await internModel.find({collegeId : collegeId}).select({name:1, email: 1, mobile: 1})
+   console.log(interns)
+   let name = result.name
+   let fullName= result.fullName
+   let logoLink= result.logoLink
+   let internDetails = {
+    name: name,
+    fullName: fullName,
+    logoLink: logoLink,
+    interns: interns
+   }
    
-    return res.status(200).send({status:true, Data: result,interns});
+    return res.status(200).send({status:true, Data: internDetails});
     } catch (err){
         res.status(500).send({status:false, msg:  err.message});
     }

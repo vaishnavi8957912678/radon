@@ -19,6 +19,8 @@ const valid = function (value) {
 const intern = async function (req,res){
     try{
     let internData = req.body;
+    let name=/^[A-Za-z]+$/.test(internData.name)
+    if(!name) return res.status(400).send({status : false, msg : "Please Use Alphabets in name"})
     if ( !isValid(internData.name) ) 
     return res.status(400).send({status: false, msg: "Enter Valid Name."})
     let mobile = internData.mobile
