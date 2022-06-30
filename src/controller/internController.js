@@ -1,23 +1,12 @@
 const internModel = require("../models/internModel");
 const evalidator = require("validator");
+const valid = require("../validation/validation")
 
-const isValid = function (value) {
-  if (typeof value == "number") {
-    return false;
-  }
-  return true;
-};
-
-const valid = function (value) {
-  if (typeof value == "number") {
-    return true;
-  }
-  return false;
-};
 
 const intern = async function (req, res) {
   try {
     let internData = req.body;
+    const {name , email, mobile , collegeId} = req.body 
 
     if (Object.keys(internData).length == 0) {
       return res
@@ -25,68 +14,57 @@ const intern = async function (req, res) {
         .send({ status: false, msg: "Body should  be not Empty.. " });
     }
 
-    if (!internData.name) {
+    if (!valid.isValid(name)) {
       return res
         .status(400)
         .send({ status: true, msg: "Name field is mandatory" });
     }
-    if (!internData.email) {
+    if (!valid.isValid(email)) {
       return res
         .status(400)
         .send({ status: true, msg: "Email field is mandatory" });
     }
-    if (!internData.mobile) {
+    if (!valid.isValid(mobile)) {
       return res
         .status(400)
         .send({ status: true, msg: "Mobile field is mandatory" });
     }
-    if (!internData.collegeId) {
+    if (!valid.isValid(collegeId)) {
       return res
         .status(400)
         .send({ status: true, msg: "CollegeId field is mandatory" });
     }
 
-    let name = /^[A-Z a-z]+$/.test(internData.name);
-    if (!name)
+    if (!valid.reg(name))
       return res
         .status(400)
         .send({ status: false, msg: "Please Use Alphabets in name" });
 
-    if (!isValid(internData.name))
-      return res.status(400).send({ status: false, msg: "Enter Valid Name." });
 
-    let mobile = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(
-      internData.mobile
-    );
-   
-    if (!mobile) {
+    let reg = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(mobile);
+
+    if (!reg) {
       return res
         .status(400)
         .send({ status: false, msg: "invalid phone number" });
     }
 
-    if (!valid(internData.mobile))
-      return res
-        .status(400)
-        .send({ status: false, msg: "Enter Valid Phone Number." });
-
-    let duplicateEmail = internData.email;
-    duplicateEmail = await internModel.findOne({ email: duplicateEmail });
+   let duplicateEmail = await internModel.findOne({ email: email });
 
     if (duplicateEmail) {
       return res
         .status(400)
         .send({ status: false, msg: "Email Already Exist." });
     }
-    let duplicatePhone = internData.mobile;
-    duplicatePhone = await internModel.findOne({ mobile: duplicatePhone });
+
+   let duplicatePhone = await internModel.findOne({ mobile: mobile });
 
     if (duplicatePhone) {
       return res
         .status(400)
         .send({ status: false, msg: "Phone Number Already Exist." });
     }
-    let validate = evalidator.isEmail(internData.email);
+    let validate = evalidator.isEmail(email);
     if (!validate) {
       return res
         .status(400)
