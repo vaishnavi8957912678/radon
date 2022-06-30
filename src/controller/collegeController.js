@@ -8,7 +8,7 @@ const valid = require("../validation/validation")
 const college = async function (req, res) {
   try {
     let collegeData = req.body;
-    const {name, fullName, logoLink} = req.body
+    let { name, fullName, logoLink } = req.body
 
     if (Object.keys(collegeData).length == 0) {
       return res
@@ -16,13 +16,13 @@ const college = async function (req, res) {
         .send({ status: false, msg: "Body should  be not Empty.. " });
     }
 
-     if(!valid.isValid(name)){ 
-        return res
-           .status(400)
-           .send({ status: false, msg: "Name field is mandatory" });
-      }
-     
-      name = name.toLowerCase()
+    if (!valid.isValid(name)) {
+      return res
+        .status(400)
+        .send({ status: false, msg: "Name field is mandatory" });
+    }
+
+
 
     if (!valid.isValid(fullName)) {
       return res
@@ -32,8 +32,8 @@ const college = async function (req, res) {
 
     if (!valid.isValid(logoLink)) {
       return res
-      .status(400)
-      .send({ status: false, msg: "LogoLink filed is mandatory" });
+        .status(400)
+        .send({ status: false, msg: "LogoLink filed is mandatory" });
     }
 
 
@@ -44,11 +44,11 @@ const college = async function (req, res) {
         .send({ status: false, msg: "Name Already Exist." });
     }
     
+    name = name.toLowerCase()
     if (!valid.reg(name))
       return res
         .status(400)
         .send({ status: false, msg: "Please Use only Alphabets in name" });
-
 
     if (!valid.reg(fullName))
       return res
@@ -77,9 +77,9 @@ const getColleges = async function (req, res) {
     let result = await collegeModel
       .findOne({ name: college })
       .select({ name: 1, fullName: 1, logoLink: 1, _id: 1 });
-    
-    if(!result){
-      return res.status(404).send({status : false, msg : "College Does Not Exist"})
+
+    if (!result) {
+      return res.status(404).send({ status: false, msg: "College Does Not Exist" })
     }
 
     let collegeId = result._id.toString();
@@ -88,8 +88,8 @@ const getColleges = async function (req, res) {
       .find({ collegeId: collegeId })
       .select({ name: 1, email: 1, mobile: 1 });
 
-    if(interns.length == 0){
-      return res.status(404).send({status:false, msg: "No intern exist."})
+    if (interns.length == 0) {
+      return res.status(404).send({ status: false, msg: "No intern exist." })
     }
 
     let name = result.name;
