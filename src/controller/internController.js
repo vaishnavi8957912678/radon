@@ -1,12 +1,15 @@
 const internModel = require("../models/internModel");
 const evalidator = require("validator");
 const valid = require("../validation/validation")
-
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId;
 
 const intern = async function (req, res) {
   try {
     let internData = req.body;
     const {name , email, mobile , collegeId} = req.body 
+    
+
 
     if (Object.keys(internData).length == 0) {
       return res
@@ -17,23 +20,32 @@ const intern = async function (req, res) {
     if (!valid.isValid(name)) {
       return res
         .status(400)
-        .send({ status: true, msg: "Name field is mandatory" });
+        .send({ status: false, msg: "Name field is mandatory" });
     }
     if (!valid.isValid(email)) {
       return res
         .status(400)
-        .send({ status: true, msg: "Email field is mandatory" });
+        .send({ status: false, msg: "Email field is mandatory" });
     }
     if (!valid.isValid(mobile)) {
       return res
         .status(400)
-        .send({ status: true, msg: "Mobile field is mandatory" });
+        .send({ status: false, msg: "Mobile field is mandatory" });
     }
+  
+
     if (!valid.isValid(collegeId)) {
       return res
         .status(400)
-        .send({ status: true, msg: "CollegeId field is mandatory" });
+        .send({ status: false, msg: "CollegeId field is mandatory" });
     }
+
+
+    let Id = collegeId
+    if(Id.length != 24){
+      return res.status(400).send({status:false,msg: "invalid College Id."}) }
+
+
 
     if (!valid.reg(name))
       return res
