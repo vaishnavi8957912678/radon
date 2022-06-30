@@ -10,3 +10,4 @@ router.post("/functionup/interns",internController.intern);
 router.get("/functionup/collegeDetails", collegeController.getColleges);
 
 module.exports = router;
+
