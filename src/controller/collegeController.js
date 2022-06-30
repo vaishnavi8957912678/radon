@@ -21,7 +21,8 @@ const college = async function (req, res) {
            .status(400)
            .send({ status: false, msg: "Name field is mandatory" });
       }
-
+     
+      name = name.toLowerCase()
 
     if (!valid.isValid(fullName)) {
       return res
@@ -65,6 +66,7 @@ const college = async function (req, res) {
 const getColleges = async function (req, res) {
   try {
     let college = req.query.collegeName;
+    college = college.toLowerCase()
 
     if (Object.keys(req.query).length == 0) {
       return res
