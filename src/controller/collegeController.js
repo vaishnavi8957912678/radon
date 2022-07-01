@@ -8,7 +8,7 @@ const valid = require("../validation/validation")
 const college = async function (req, res) {
   try {
     let collegeData = req.body;
-    let { name, fullName, logoLink } = req.body
+    let {name, fullName, logoLink} = req.body
 
     if (Object.keys(collegeData).length == 0) {
       return res
@@ -16,13 +16,12 @@ const college = async function (req, res) {
         .send({ status: false, msg: "Body should  be not Empty.. " });
     }
 
-    if (!valid.isValid(name)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Name field is mandatory" });
-    }
-
-
+     if(!valid.isValid(name)){ 
+        return res
+           .status(400)
+           .send({ status: false, msg: "Name field is mandatory" });
+      }
+     
 
     if (!valid.isValid(fullName)) {
       return res
@@ -50,6 +49,11 @@ const college = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Please Use only Alphabets in name" });
 
+      name = name.toLowerCase()
+      console.log(name)
+     collegeData.name = name
+     
+
     if (!valid.reg(fullName))
       return res
         .status(400)
@@ -66,14 +70,14 @@ const college = async function (req, res) {
 const getColleges = async function (req, res) {
   try {
     let college = req.query.collegeName;
-    college = college.toLowerCase()
-
+    
     if (Object.keys(req.query).length == 0) {
       return res
-        .status(400)
-        .send({ status: false, msg: "Enter college Name.. " });
+      .status(400)
+      .send({ status: false, msg: "Enter college Name.. " });
     }
-
+    
+    college = college.toLowerCase()
     let result = await collegeModel
       .findOne({ name: college })
       .select({ name: 1, fullName: 1, logoLink: 1, _id: 1 });
@@ -112,4 +116,3 @@ module.exports = {
   college: college,
   getColleges: getColleges,
 };
-
